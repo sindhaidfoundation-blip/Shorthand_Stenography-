@@ -188,7 +188,8 @@ class MainActivityUiTest {
         composeTestRule.waitForIdle()
 
         // Switch to Legal JSON DB quick lookup mode inside Symbols tab
-        composeTestRule.onNodeWithTag("symbols_lazy_list").performScrollToIndex(0)
+        composeTestRule.onNodeWithTag("symbols_lazy_list")
+            .performScrollToNode(hasTestTag("symbols_mode_JSON_LEXICON"))
         composeTestRule.onNodeWithTag("symbols_mode_JSON_LEXICON").performClick()
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithTag("json_db_status_card").assertExists()
