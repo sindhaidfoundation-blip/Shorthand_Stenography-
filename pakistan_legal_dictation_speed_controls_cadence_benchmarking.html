@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101923">
+<title>Pakistan Legal Dictation · Cadence Benchmarking</title>
+<style>
+:root{--bg:#0b121a;--panel:#121e29;--panel2:#172633;--line:#293c49;--ink:#edf4f7;--muted:#9db0ba;--teal:#68dfd0;--teal2:#0c7169;--amber:#ffc078;--red:#ff8585;--radius:18px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#173b45 0,transparent 38%),var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,select{font:inherit}button{cursor:pointer}
+.shell{max-width:1180px;margin:auto;padding:28px 22px 60px}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:26px}
+.brand{display:flex;align-items:center;gap:13px}.logo{width:44px;height:44px;border-radius:13px;background:linear-gradient(145deg,#8af0e1,#137d75);display:grid;place-items:center;color:#062a2a;font-size:22px;font-weight:900}
+.eyebrow{font-size:11px;letter-spacing:.17em;text-transform:uppercase;color:var(--teal);font-weight:800}
+h1{font-size:clamp(23px,4vw,34px);line-height:1.12;margin:4px 0 0;letter-spacing:-.04em}
+.status{border:1px solid #31554f;background:#102b2b;color:var(--teal);border-radius:999px;padding:8px 13px;font-size:12px;font-weight:700;white-space:nowrap}
+.sub{color:var(--muted);margin:9px 0 24px;max-width:750px}
+.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.85fr);gap:18px;align-items:start}
+.stack{display:grid;gap:18px}.card{background:linear-gradient(160deg,rgba(23,38,51,.97),rgba(15,26,36,.97));border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:0 12px 34px #0002}
+.cardhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:17px}
+h2{font-size:17px;margin:0;letter-spacing:-.02em}.hint{color:var(--muted);font-size:12px;margin-top:4px}
+.kicker{font-size:10px;letter-spacing:.14em;color:var(--muted);font-weight:800;text-transform:uppercase}
+.sources,.profiles,.benchmarks{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.choice{border:1px solid var(--line);border-radius:13px;padding:12px;background:#101b25;color:var(--ink);text-align:left;min-height:76px}
+.choice strong{display:block;font-size:13px}.choice small{color:var(--muted);font-size:11px;display:block;margin-top:4px}
+.choice.active{border-color:var(--teal);background:#12312f;box-shadow:inset 0 0 0 1px #68dfd044}
+.player{margin-top:16px;padding:15px;border-radius:15px;background:#0b151e;border:1px solid #263b48}
+.tracktop{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+.wave{height:54px;display:flex;align-items:center;justify-content:center;gap:4px;margin:9px 0}
+.wave i{width:4px;border-radius:8px;background:linear-gradient(180deg,var(--teal),#238d84);height:var(--h);opacity:.85}
+.wave.playing i{animation:pulse .65s ease-in-out infinite alternate;animation-delay:var(--d)}
+@keyframes pulse{to{transform:scaleY(.35);opacity:.5}}
+.transport{display:flex;justify-content:center;align-items:center;gap:12px}
+.iconbtn{border:1px solid var(--line);background:#182936;color:var(--ink);border-radius:50%;width:39px;height:39px;font-weight:800}
+.play{width:48px;height:48px;border:0;background:var(--teal);color:#082927;font-size:19px}
+.toggles{display:flex;gap:15px;flex-wrap:wrap;margin-top:14px;color:var(--muted);font-size:12px}
+.toggles label{display:flex;gap:7px;align-items:center}.toggles input{accent-color:var(--teal)}
+.speed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.speed{border:1px solid var(--line);background:#101b25;color:var(--ink);border-radius:13px;padding:12px;text-align:left}
+.speed b{font-size:22px;display:block}.speed span{font-size:11px;color:var(--muted)}
+.speed.active{border-color:var(--teal);background:#12312f}
+.speedmeta{display:flex;justify-content:space-between;gap:8px;margin:16px 0 8px;color:var(--muted);font-size:12px}
+input[type=range]{width:100%;accent-color:var(--teal)}
+.readouts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.metric{background:#0d1922;border:1px solid var(--line);border-radius:12px;padding:11px}
+.metric b{display:block;font-size:19px}.metric span{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}
+.benchmarks{grid-template-columns:repeat(2,1fr)}
+.bench{padding:13px;border:1px solid var(--line);background:#101b25;border-radius:13px;color:var(--ink);text-align:left}
+.bench b{display:block;font-size:20px;color:var(--teal)}.bench span{font-size:12px}.bench small{display:block;color:var(--muted);margin-top:3px}
+.cadence{display:flex;align-items:center;gap:15px}
+.pulseorb{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;border:1px solid #3a807a;background:#10302f;color:var(--teal);font-size:26px;box-shadow:0 0 0 8px #68dfd00d}
+.pulseorb.active{animation:beat .5s ease-in-out infinite alternate}
+@keyframes beat{to{transform:scale(1.1);box-shadow:0 0 0 15px #68dfd018}}
+.cadenceinfo{flex:1}.cadenceinfo b{font-size:25px}.cadenceinfo small{display:block;color:var(--muted)}
+.milestones{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:19px}
+.mile{text-align:center;color:var(--muted);font-size:10px}.dot{width:11px;height:11px;border-radius:50%;background:#344a56;margin:0 auto 7px}.mile.done .dot{background:var(--teal);box-shadow:0 0 0 4px #68dfd01b}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.btn{border:1px solid var(--line);border-radius:11px;padding:10px 14px;background:#1a2b38;color:var(--ink);font-weight:700;font-size:12px}
+.btn.primary{background:var(--teal);color:#082927;border-color:var(--teal)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.toolrow{display:grid;gap:10px}.tool{display:flex;align-items:center;justify-content:space-between;padding:12px;border:1px solid var(--line);border-radius:12px;background:#101b25}
+.tool strong{font-size:13px;display:block}.tool small{font-size:11px;color:var(--muted)}
+.switch{accent-color:var(--teal);width:18px;height:18px}
+.passage{color:#d9e4e9;line-height:1.8;font-family:Georgia,serif;font-size:15px;background:#0c1720;border:1px solid var(--line);border-radius:13px;padding:16px}
+select{background:#101b25;color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:8px}
+footer{text-align:center;color:#718893;font-size:11px;margin-top:24px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.shell{padding:20px 14px 40px}}
+@media(max-width:480px){.sources,.profiles{grid-template-columns:1fr}.speed-grid{grid-template-columns:repeat(2,1fr)}.card{padding:16px}.status{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header>
+ <div class="brand"><div class="logo">P</div><div><div class="eyebrow">Pitman Steno · Pakistan</div><h1>Legal Dictation Studio</h1></div></div>
+ <div class="status">● BENCHMARK READY</div>
+</header>
+<p class="sub">Professional dictation practice with courtroom cadence profiles, precision WPM controls and live progress benchmarks.</p>
+<div class="layout">
+<main class="stack">
+<section class="card">
+ <div class="cardhead"><div><div class="kicker">01 · Audio engine</div><h2>Choose your dictation source</h2><div class="hint">Select an audio source and playback cadence.</div></div></div>
+ <div class="sources" id="sources">
+  <button class="choice active"><strong>▣ Audio Upload</strong><small>MP3 / WAV file</small></button>
+  <button class="choice"><strong>▤ Court Archive</strong><small>Supreme Court · Courtroom #1</small></button>
+  <button class="choice"><strong>✦ AI Judicial Dictator</strong><small>Neural voice · 24 kHz</small></button>
+ </div>
+ <div class="kicker" style="margin:18px 0 9px">Voice cadence profile</div>
+ <div class="profiles" id="profiles">
+  <button class="choice active"><strong>Pakistan Superior Court</strong><small>Commonwealth cadence</small></button>
+  <button class="choice"><strong>US Court Stenomask</strong><small>Firm, compact delivery</small></button>
+  <button class="choice"><strong>Neutral Pacer</strong><small>Strict WPM timing</small></button>
+ </div>
+ <div class="player">
+  <div class="tracktop"><span id="sourceLabel">AI Judicial Dictator · Ready</span><span id="clock">00:00 / 02:30</span></div>
+  <div class="wave" id="wave"></div>
+  <div class="transport">
+   <button class="iconbtn" id="back" aria-label="Rewind five seconds">↶5</button>
+   <button class="iconbtn play" id="play" aria-label="Play">▶</button>
+   <button class="iconbtn" id="forward" aria-label="Forward five seconds">5↷</button>
+  </div>
+  <div class="toggles"><label><input type="checkbox" id="pitch" checked> Pitch preserve</label><label><input type="checkbox" id="chime"> 25-word acoustic chime</label></div>
+ </div>
+ <div class="actions"><label class="btn" for="audioFile">＋ Upload audio</label><input id="audioFile" type="file" accept=".mp3,.wav,audio/*" hidden><button class="btn" id="sample">Load sample passage</button></div>
+ <audio id="audio" preload="metadata"></audio>
+</section>
+
+<section class="card">
+ <div class="cardhead"><div><div class="kicker">02 · Speed calibration</div><h2>Target dictation speed</h2><div class="hint">Select a preset or fine-tune between 60 and 180 WPM.</div></div><span class="status" id="tier">COURT BASELINE</span></div>
+ <div class="speed-grid" id="presets">
+  <button class="speed" data-wpm="60"><b>60</b><span>WPM · Foundation</span></button>
+  <button class="speed" data-wpm="80"><b>80</b><span>WPM · District Court</span></button>
+  <button class="speed active" data-wpm="100"><b>100</b><span>WPM · High Court</span></button>
+  <button class="speed" data-wpm="120"><b>120</b><span>WPM · Supreme Court</span></button>
+  <button class="speed" data-wpm="140"><b>140</b><span>WPM · Assembly</span></button>
+  <button class="speed" data-wpm="160"><b>160</b><span>WPM · Championship</span></button>
+ </div>
+ <div class="speedmeta"><span>Fine tune speed</span><strong><span id="wpmLabel">100</span> WPM</strong></div>
+ <input type="range" min="60" max="180" step="5" value="100" id="wpm">
+ <div class="speedmeta"><span>60 WPM</span><span>180 WPM</span></div>
+ <div class="readouts">
+  <div class="metric"><b id="duration">02:30</b><span>Passage duration</span></div>
+  <div class="metric"><b id="multiplier">1.00×</b><span>Pacing multiplier</span></div>
+  <div class="metric"><b id="words">250</b><span>Practice words</span></div>
+ </div>
+</section>
+
+<section class="card">
+ <div class="cardhead"><div><div class="kicker">03 · Live cadence</div><h2>Metronome & progress tracker</h2><div class="hint">25-word interval milestones for timed practice.</div></div><span class="status" id="calStatus">CALIBRATED</span></div>
+ <div class="cadence"><div class="pulseorb" id="orb">♫</div><div class="cadenceinfo"><b><span id="tempo">100</span> WPM</b><small><span id="wps">1.67</span> words / second · quarter-minute interval: 25 words</small></div><button class="btn primary" id="preview">▶ 5-sec preview</button></div>
+ <div class="milestones" id="milestones">
+  <div class="mile done"><div class="dot"></div>Start</div><div class="mile"><div class="dot"></div>25 words</div><div class="mile"><div class="dot"></div>50 words</div><div class="mile"><div class="dot"></div>75 words</div><div class="mile"><div class="dot"></div>100 words</div>
+ </div>
+ <div class="actions"><button class="btn" id="reset">Reset progress</button><span class="hint" id="progressText">0 / 100 words completed</span></div>
+</section>
+
+<section class="card">
+ <div class="cardhead"><div><div class="kicker">04 · Newspaper practice</div><h2>Dawn newspaper dictation</h2><div class="hint">Practice with an editorial-style legal and current-affairs passage.</div></div><select id="passageType"><option>Editorial</option><option>News report</option><option>Legal reform</option></select></div>
+ <div class="passage" id="passage">Public institutions must strengthen transparency, accountability and public service delivery. Effective legal reform depends on accessible courts, timely decisions and the consistent application of constitutional principles. A modern justice system should protect fundamental rights while ensuring that every citizen can seek a fair hearing.</div>
+ <div class="actions"><button class="btn primary" id="generate">Generate dictation exercise</button><button class="btn" id="bookmark">☆ Save to Legal Library</button><button class="btn" id="export">Export / Print PDF</button></div>
+</section>
+</main>
+
+<aside class="stack">
+<section class="card">
+ <div class="cardhead"><div><div class="kicker">Official practice targets</div><h2>Pakistan legal benchmarks</h2><div class="hint">Tap a benchmark to set your target speed.</div></div></div>
+ <div class="benchmarks" id="benchmarks">
+  <button class="bench" data-wpm="80"><b>80</b><span>Sessions Court</span><small>District baseline</small></button>
+  <button class="bench" data-wpm="100"><b>100</b><span>High Court Exam</span><small>Intermediate target</small></button>
+  <button class="bench" data-wpm="120"><b>120</b><span>Supreme Court Test</span><small>Advanced target</small></button>
+  <button class="bench" data-wpm="140"><b>140</b><span>National Assembly</span><small>Competitive sprint</small></button>
+ </div>
+ <p class="hint" style="margin:12px 0 0">Practice targets shown for this training tool; confirm the current speed requirement in the relevant recruitment or examination notice.</p>
+</section>
+<section class="card">
+ <div class="cardhead"><div><div class="kicker">05 · Acoustic tools</div><h2>Practice environment</h2></div></div>
+ <div class="toolrow">
+  <div class="tool"><div><strong>Quarter-minute chime</strong><small>Alert every 25 words</small></div><input class="switch" type="checkbox" id="toolChime"></div>
+  <div class="tool"><div><strong>Courtroom ambience</strong><small>Low-level room-tone simulation</small></div><input class="switch" type="checkbox" id="ambience"></div>
+  <div class="tool"><div><strong>Speed progression ladder</strong><small>Increase by 10 WPM every 60 sec</small></div><input class="switch" type="checkbox" id="ladder"></div>
+ </div>
+ <div class="actions"><button class="btn" id="testChime">♪ Test chime</button></div>
+</section>
+<section class="card">
+ <div class="cardhead"><div><div class="kicker">Session summary</div><h2>Your current drill</h2></div></div>
+ <div class="readouts">
+  <div class="metric"><b id="summaryWpm">100</b><span>Target WPM</span></div>
+  <div class="metric"><b id="summaryTime">2:30</b><span>Duration</span></div>
+  <div class="metric"><b id="summaryTier">High</b><span>Training tier</span></div>
+ </div>
+ <p class="hint">Tip: Start at a comfortable speed, focus on accuracy, then raise the pace in small increments.</p>
+</section>
+</aside>
+</div>
+<footer>PITMAN STENO · PAKISTAN LEGAL DICTATION STUDIO · LOCAL DEMO</footer>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const audio=$('audio'); let wpm=100, playing=false, previewTimer=null, previewInterval=null, progress=0, sampleWords=250;
+const passages={
+ 'Editorial':'Public institutions must strengthen transparency, accountability and public service delivery. Effective legal reform depends on accessible courts, timely decisions and the consistent application of constitutional principles. A modern justice system should protect fundamental rights while ensuring that every citizen can seek a fair hearing.',
+ 'News report':'The provincial administration has announced a coordinated programme to improve public services, strengthen local infrastructure and expand access to essential facilities. Officials said that transparent monitoring, timely reporting and community participation would remain central to implementation.',
+ 'Legal reform':'An independent and efficient justice system is essential to the rule of law. Courts require adequate resources, trained personnel and modern case-management systems to reduce delays. Legal reform must remain focused on fairness, due process and equal access to justice.'
+};
+function duration(){return Math.round(sampleWords/wpm*60)}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function tier(){return wpm<80?'FOUNDATION':wpm<100?'COURT BASELINE':wpm<120?'HIGH COURT':wpm<140?'SUPREME COURT':wpm<160?'CHAMPIONSHIP':'ELITE SPRINT'}
+function setSpeed(v){
+ wpm=Number(v);$('wpm').value=wpm;$('wpmLabel').textContent=wpm;$('tempo').textContent=wpm;$('wps').textContent=(wpm/60).toFixed(2);
+ $('duration').textContent=fmt(duration());$('multiplier').textContent=(wpm/100).toFixed(2)+'×';$('words').textContent=sampleWords;
+ $('tier').textContent=tier();$('summaryWpm').textContent=wpm;$('summaryTime').textContent=Math.floor(duration()/60)+':'+String(duration()%60).padStart(2,'0');$('summaryTier').textContent=wpm>=120?'Advanced':wpm>=100?'High':'Core';
+ document.querySelectorAll('.speed').forEach(b=>b.classList.toggle('active',Number(b.dataset.wpm)===wpm));
+ if(audio.src && audio.duration) audio.playbackRate=Math.max(.6,Math.min(1.8,wpm/100));
+}
+$('wpm').addEventListener('input',e=>setSpeed(e.target.value));
+document.querySelectorAll('.speed,.bench').forEach(b=>b.addEventListener('click',()=>setSpeed(b.dataset.wpm)));
+function choices(id){document.querySelectorAll('#'+id+' .choice').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#'+id+' .choice').forEach(x=>x.classList.remove('active'));b.classList.add('active');if(id==='sources')$('sourceLabel').textContent=b.innerText.split('\n')[0]+' · Selected'}))}
+choices('sources');choices('profiles');
+for(let i=0;i<22;i++){let bar=document.createElement('i');bar.style.setProperty('--h',(12+Math.abs(Math.sin(i*1.7))*35)+'px');bar.style.setProperty('--d',(i*0.035)+'s');$('wave').append(bar)}
+function updateClock(){let cur=audio.currentTime||0,total=audio.duration||duration();$('clock').textContent=fmt(Math.floor(cur))+' / '+fmt(Math.floor(total))}
+function play(){if(audio.src){if(audio.paused)audio.play().catch(()=>{});else audio.pause()}else{playing=!playing;setPlaying(playing)}}
+function setPlaying(v){playing=v;$('play').textContent=v?'Ⅱ':'▶';$('wave').classList.toggle('playing',v)}
+$('play').onclick=play;$('back').onclick=()=>{if(audio.src)audio.currentTime=Math.max(0,audio.currentTime-5)};$('forward').onclick=()=>{if(audio.src)audio.currentTime=Math.min(audio.duration||0,audio.currentTime+5)};
+audio.addEventListener('play',()=>setPlaying(true));audio.addEventListener('pause',()=>setPlaying(false));audio.addEventListener('timeupdate',updateClock);audio.addEventListener('loadedmetadata',updateClock);
+$('audioFile').onchange=e=>{let f=e.target.files[0];if(f){audio.src=URL.createObjectURL(f);$('sourceLabel').textContent=f.name;audio.load()}};
+$('sample').onclick=()=>{$('sourceLabel').textContent='Sample passage selected · use AI dictation preview';$('passage').scrollIntoView({behavior:'smooth',block:'center'})};
+function beep(freq=740,dur=.09){try{let c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator(),g=c.createGain();o.frequency.value=freq;g.gain.setValueAtTime(.08,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+dur);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+dur);o.onended=()=>c.close()}catch(e){}}
+$('preview').onclick=()=>{clearInterval(previewInterval);clearTimeout(previewTimer);$('calStatus').textContent='TESTING · 5 SEC';$('orb').classList.add('active');let beat=60000/wpm;beep();previewInterval=setInterval(()=>beep(),beat);previewTimer=setTimeout(()=>{clearInterval(previewInterval);$('orb').classList.remove('active');$('calStatus').textContent='CALIBRATED'},5000)};
+$('testChime').onclick=()=>beep(920,.18);
+$('reset').onclick=()=>{progress=0;renderProgress()};
+function renderProgress(){document.querySelectorAll('.mile').forEach((m,i)=>m.classList.toggle('done',progress>=i*25));$('progressText').textContent=progress+' / 100 words completed'}
+$('generate').onclick=()=>{let type=$('passageType').value;$('passage').textContent=passages[type];sampleWords=$('passage').textContent.trim().split(/\s+/).length;setSpeed(wpm)};
+$('passageType').onchange=()=>{$('passage').textContent=passages[$('passageType').value];sampleWords=$('passage').textContent.trim().split(/\s+/).length;setSpeed(wpm)};
+$('bookmark').onclick=e=>{let on=e.target.dataset.on!=='1';e.target.dataset.on=on?'1':'0';e.target.textContent=on?'★ Saved to Legal Library':'☆ Save to Legal Library'};
+$('export').onclick=()=>window.print();
+$('chime').onchange=e=>$('toolChime').checked=e.target.checked;$('toolChime').onchange=e=>$('chime').checked=e.target.checked;
+$('ladder').onchange=e=>{if(e.target.checked){let count=0;let id=setInterval(()=>{if(!$('ladder').checked){clearInterval(id);return}count++;setSpeed(Math.min(180,wpm+10));if(count>=12)clearInterval(id)},60000)}};
+$('ambience').onchange=e=>{if(e.target.checked)beep(180,.3)};
+setSpeed(100);renderProgress();updateClock();
+</script>
+</body>
+</html>
