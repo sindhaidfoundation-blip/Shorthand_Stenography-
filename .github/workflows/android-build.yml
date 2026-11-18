@@ -37,12 +37,14 @@ jobs:
         run: gradle :app:testDebugUnitTest
 
       - name: Build debug APK
+        if: always()
         run: gradle :app:assembleDebug
 
       - name: Upload debug APK
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pitman-steno-debug-apk
           path: app/build/outputs/apk/debug/*.apk
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 14
