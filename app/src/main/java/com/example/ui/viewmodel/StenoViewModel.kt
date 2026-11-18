@@ -14,6 +14,7 @@ import com.example.audio.TtsState
 import com.example.data.DawnFeedType
 import com.example.data.DawnRssFetcher
 import com.example.data.PakistanLegalCorpus
+import com.example.data.PitmanJsonLexiconRepository
 import com.example.data.SettingsPreferences
 import com.example.data.StenoUserPreferences
 import com.example.domain.model.AudioSourceType
@@ -21,9 +22,13 @@ import com.example.domain.model.DictationMode
 import com.example.domain.model.LegalCasePassage
 import com.example.domain.model.PassageHighlight
 import com.example.domain.model.PassageTab
+import com.example.domain.model.PitmanJsonDatabaseSnapshot
 import com.example.domain.model.StenoAnalysis
+import com.example.domain.model.StenoCategory
+import com.example.domain.model.StenoPosition
 import com.example.domain.model.StenoStrokeSpec
 import com.example.domain.model.SymbolExerciseGroup
+import com.example.domain.model.SymbolsSubMode
 import com.example.domain.model.VoiceCadenceProfile
 import com.example.domain.pitman.PitmanAnalyzer
 import com.example.export.StenoPdfExporter
@@ -63,7 +68,11 @@ data class StenoUiState(
     val liveDawnPassages: List<LegalCasePassage> = emptyList(),
     val isFetchingDawn: Boolean = false,
     val selectedSymbolGroup: SymbolExerciseGroup = SymbolExerciseGroup.ALL,
-    val symbolSearchQuery: String = ""
+    val symbolSearchQuery: String = "",
+    val symbolsSubMode: SymbolsSubMode = SymbolsSubMode.WORKBOOK,
+    val jsonLexiconSnapshot: PitmanJsonDatabaseSnapshot = PitmanJsonDatabaseSnapshot(),
+    val jsonLookupQuery: String = "",
+    val jsonDomainFilter: String = "All"
 ) {
     val bookmarkedPassages: List<LegalCasePassage>
         get() {
@@ -77,9 +86,17 @@ data class StenoUiState(
         get() = activePassage.id in prefs.bookmarkedIds
 }
 
+private data class JsonLexiconSlice(
+    val subMode: SymbolsSubMode,
+    val snapshot: PitmanJsonDatabaseSnapshot,
+    val query: String,
+    val domainFilter: String
+)
+
 class StenoViewModel(application: Application) : AndroidViewModel(application) {
 
     private val prefsRepo = SettingsPreferences(application)
+    private val jsonLexiconRepo = PitmanJsonLexiconRepository(application)
     private val cadenceEngine = CadenceAcousticEngine(scope = viewModelScope)
 
     private var progressionJob: Job? = null
@@ -124,6 +141,31 @@ class StenoViewModel(application: Application) : AndroidViewModel(application) {
     private val _isFetchingDawn = MutableStateFlow(false)
     private val _selectedSymbolGroup = MutableStateFlow(SymbolExerciseGroup.ALL)
     private val _symbolSearchQuery = MutableStateFlow("")
+    private val _symbolsSubMode = MutableStateFlow(SymbolsSubMode.WORKBOOK)
+    private val _jsonLexiconSnapshot = MutableStateFlow(PitmanJsonDatabaseSnapshot())
+    private val _jsonLookupQuery = MutableStateFlow("")
+    private val _jsonDomainFilter = MutableStateFlow("All")
+
+    init {
+        viewModelScope.launch {
+            runCatching { jsonLexiconRepo.loadDatabase() }
+                .onSuccess { _jsonLexiconSnapshot.value = it }
+        }
+    }
+
+    private val jsonLexiconSliceFlow = combine(
+        _symbolsSubMode,
+        _jsonLexiconSnapshot,
+        _jsonLookupQuery,
+        _jsonDomainFilter
+    ) { mode, snapshot, query, domain ->
+        JsonLexiconSlice(
+            subMode = mode,
+            snapshot = snapshot,
+            query = query,
+            domainFilter = domain
+        )
+    }
 
     private val _prefs = prefsRepo.preferencesFlow.stateIn(
         scope = viewModelScope,
@@ -154,7 +196,8 @@ class StenoViewModel(application: Application) : AndroidViewModel(application) {
         _liveDawnPassages,
         _isFetchingDawn,
         _selectedSymbolGroup,
-        _symbolSearchQuery
+        _symbolSearchQuery,
+        jsonLexiconSliceFlow
     ) { values ->
         val passage = values[0] as LegalCasePassage
         val mode = values[1] as DictationMode
@@ -178,6 +221,7 @@ class StenoViewModel(application: Application) : AndroidViewModel(application) {
         val fetchingDawn = values[19] as Boolean
         val symbolGroup = values[20] as SymbolExerciseGroup
         val symbolQuery = values[21] as String
+        val lexiconSlice = values[22] as JsonLexiconSlice
 
         StenoUiState(
             activePassage = passage,
@@ -203,7 +247,11 @@ class StenoViewModel(application: Application) : AndroidViewModel(application) {
             liveDawnPassages = liveDawn,
             isFetchingDawn = fetchingDawn,
             selectedSymbolGroup = symbolGroup,
-            symbolSearchQuery = symbolQuery
+            symbolSearchQuery = symbolQuery,
+            symbolsSubMode = lexiconSlice.subMode,
+            jsonLexiconSnapshot = lexiconSlice.snapshot,
+            jsonLookupQuery = lexiconSlice.query,
+            jsonDomainFilter = lexiconSlice.domainFilter
         )
     }.stateIn(
         scope = viewModelScope,
@@ -484,6 +532,71 @@ class StenoViewModel(application: Application) : AndroidViewModel(application) {
 
     fun setSymbolSearchQuery(query: String) {
         _symbolSearchQuery.value = query
+    }
+
+    fun setSymbolsSubMode(mode: SymbolsSubMode) {
+        _symbolsSubMode.value = mode
+    }
+
+    fun setJsonLookupQuery(query: String) {
+        _jsonLookupQuery.value = query
+    }
+
+    fun setJsonDomainFilter(domain: String) {
+        _jsonDomainFilter.value = domain
+    }
+
+    fun addJsonLexiconEntry(
+        term: String,
+        strokeFormula: String,
+        position: StenoPosition,
+        category: StenoCategory,
+        courtDomain: String,
+        theoryPrinciple: String,
+        ruleNote: String,
+        legalDefinition: String,
+        glyphKey: String
+    ) {
+        viewModelScope.launch {
+            runCatching {
+                jsonLexiconRepo.addCustomEntry(
+                    term = term,
+                    strokeFormula = strokeFormula,
+                    position = position,
+                    category = category,
+                    courtDomain = courtDomain,
+                    theoryPrinciple = theoryPrinciple,
+                    ruleNote = ruleNote,
+                    legalDefinition = legalDefinition,
+                    glyphKey = glyphKey
+                )
+            }.onSuccess { updated ->
+                _jsonLexiconSnapshot.value = updated
+                showMessage("Saved \"$term\" to local Pitman JSON DB")
+            }.onFailure {
+                showMessage("Unable to write to local JSON database")
+            }
+        }
+    }
+
+    fun deleteJsonLexiconEntry(entryId: String) {
+        viewModelScope.launch {
+            runCatching { jsonLexiconRepo.deleteEntry(entryId) }
+                .onSuccess { updated ->
+                    _jsonLexiconSnapshot.value = updated
+                    showMessage("Removed custom outline from JSON DB")
+                }
+        }
+    }
+
+    fun resetJsonLexiconToSeed() {
+        viewModelScope.launch {
+            runCatching { jsonLexiconRepo.resetToDefaultSeed() }
+                .onSuccess { updated ->
+                    _jsonLexiconSnapshot.value = updated
+                    showMessage("Restored default Legal JSON Lexicon")
+                }
+        }
     }
 
     fun fetchDawnFeed(opinionOnly: Boolean) {

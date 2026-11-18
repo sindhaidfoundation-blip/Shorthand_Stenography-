@@ -57,10 +57,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.R
 import com.example.domain.model.PitmanSymbolEntry
+import com.example.domain.model.StenoCategory
+import com.example.domain.model.StenoPosition
 import com.example.domain.model.StenoStrokeSpec
 import com.example.domain.model.SymbolExerciseGroup
+import com.example.domain.model.SymbolsSubMode
 import com.example.domain.pitman.PitmanSymbolCatalog
+import com.example.ui.components.LegalJsonLexiconPane
 import com.example.ui.components.PitmanStemCanvas
+import com.example.ui.components.SymbolsSubModeSwitcher
 import com.example.ui.theme.JetBrainsMonoFontFamily
 import com.example.ui.theme.LocalStenoColors
 import com.example.ui.theme.SourceSerifFontFamily
@@ -73,8 +78,40 @@ fun SymbolsScreen(
     onSearchQueryChange: (String) -> Unit,
     onInspectSymbol: (StenoStrokeSpec) -> Unit,
     onPronounceTerm: (String) -> Unit,
+    onSelectSubMode: (SymbolsSubMode) -> Unit = {},
+    onJsonQueryChange: (String) -> Unit = {},
+    onJsonDomainFilterChange: (String) -> Unit = {},
+    onAddJsonLexiconEntry: (
+        term: String,
+        strokeFormula: String,
+        position: StenoPosition,
+        category: StenoCategory,
+        courtDomain: String,
+        theoryPrinciple: String,
+        ruleNote: String,
+        legalDefinition: String,
+        glyphKey: String
+    ) -> Unit = { _, _, _, _, _, _, _, _, _ -> },
+    onDeleteJsonLexiconEntry: (String) -> Unit = {},
+    onResetJsonLexiconSeed: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    if (uiState.symbolsSubMode == SymbolsSubMode.JSON_LEXICON) {
+        LegalJsonLexiconPane(
+            uiState = uiState,
+            onSwitchSubMode = onSelectSubMode,
+            onQueryChange = onJsonQueryChange,
+            onDomainFilterChange = onJsonDomainFilterChange,
+            onInspectSpec = onInspectSymbol,
+            onPronounceTerm = onPronounceTerm,
+            onAddCustomEntry = onAddJsonLexiconEntry,
+            onDeleteEntry = onDeleteJsonLexiconEntry,
+            onResetSeed = onResetJsonLexiconSeed,
+            modifier = modifier
+        )
+        return
+    }
+
     val extendedColors = LocalStenoColors.current
     val filteredEntries = remember(uiState.selectedSymbolGroup, uiState.symbolSearchQuery) {
         PitmanSymbolCatalog.entriesFor(uiState.selectedSymbolGroup, uiState.symbolSearchQuery)
@@ -104,6 +141,13 @@ fun SymbolsScreen(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
+        item {
+            SymbolsSubModeSwitcher(
+                activeMode = uiState.symbolsSubMode,
+                onModeSelected = onSelectSubMode
+            )
+        }
+
         // Header Summary Banner
         item {
             Surface(

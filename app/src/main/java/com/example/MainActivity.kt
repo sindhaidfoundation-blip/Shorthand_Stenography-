@@ -352,7 +352,13 @@ fun PitmanStenoApp(
                                 onSelectGroup = viewModel::setSelectedSymbolGroup,
                                 onSearchQueryChange = viewModel::setSymbolSearchQuery,
                                 onInspectSymbol = viewModel::inspectSpec,
-                                onPronounceTerm = viewModel::pronounceTermOnly
+                                onPronounceTerm = viewModel::pronounceTermOnly,
+                                onSelectSubMode = viewModel::setSymbolsSubMode,
+                                onJsonQueryChange = viewModel::setJsonLookupQuery,
+                                onJsonDomainFilterChange = viewModel::setJsonDomainFilter,
+                                onAddJsonLexiconEntry = viewModel::addJsonLexiconEntry,
+                                onDeleteJsonLexiconEntry = viewModel::deleteJsonLexiconEntry,
+                                onResetJsonLexiconSeed = viewModel::resetJsonLexiconToSeed
                             )
                         }
 

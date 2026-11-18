@@ -187,6 +187,21 @@ class MainActivityUiTest {
         }
         composeTestRule.waitForIdle()
 
+        // Switch to Legal JSON DB quick lookup mode inside Symbols tab
+        composeTestRule.onNodeWithTag("symbols_lazy_list").performScrollToIndex(0)
+        composeTestRule.onNodeWithTag("symbols_mode_JSON_LEXICON").performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("json_db_status_card").assertExists()
+        composeTestRule.onNodeWithTag("json_lexicon_lazy_list")
+            .performScrollToNode(hasTestTag("json_entry_lex_habeas_corpus"))
+        composeTestRule.onNodeWithTag("json_entry_lex_habeas_corpus").performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("pronounce_outline_button").assertExists()
+        composeTestRule.activityRule.scenario.onActivity { activity ->
+            activity.onBackPressedDispatcher.onBackPressed()
+        }
+        composeTestRule.waitForIdle()
+
         // Navigate to Corpus and filter Dawn Editorial dictation
         composeTestRule.onNodeWithTag("nav_corpus").performClick()
         composeTestRule.waitForIdle()

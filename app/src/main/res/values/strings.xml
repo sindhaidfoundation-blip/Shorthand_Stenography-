@@ -42,4 +42,6 @@
     <string name="export_steno_pdf">Export Steno PDF</string>
     <string name="symbols_screen_title">Pitman Shorthand Symbols</string>
     <string name="symbols_screen_subtitle">Master straight &amp; curved strokes, circles, hooks, grammalogues, and Dawn editorial contractions</string>
+    <string name="json_lexicon_title">Legal Terminology JSON DB</string>
+    <string name="json_lexicon_subtitle">Local offline JSON store mapping Pitman outlines to Pakistan legal &amp; Dawn terminology</string>
 </resources>
