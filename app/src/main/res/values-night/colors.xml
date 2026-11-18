@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material Design 3 Dark Color Tokens (Judicial Slate Palette) -->
+    <color name="md_theme_primary">#FFDAE2FD</color>
+    <color name="md_theme_onPrimary">#FF131B2E</color>
+    <color name="md_theme_primaryContainer">#FF293247</color>
+    <color name="md_theme_onPrimaryContainer">#FFBEC6E0</color>
+    <color name="md_theme_inversePrimary">#FF131B2E</color>
+
+    <color name="md_theme_secondary">#FF6BD8CB</color>
+    <color name="md_theme_onSecondary">#FF003732</color>
+    <color name="md_theme_secondaryContainer">#FF005049</color>
+    <color name="md_theme_onSecondaryContainer">#FF89F5E7</color>
+
+    <color name="md_theme_tertiary">#FFFFB77D</color>
+    <color name="md_theme_onTertiary">#FF4A2500</color>
+    <color name="md_theme_tertiaryContainer">#FF6E3900</color>
+    <color name="md_theme_onTertiaryContainer">#FFFFDCC3</color>
+
+    <color name="md_theme_error">#FFFFB4AB</color>
+    <color name="md_theme_onError">#FF690005</color>
+    <color name="md_theme_errorContainer">#FF93000A</color>
+    <color name="md_theme_onErrorContainer">#FFFFDAD6</color>
+
+    <color name="md_theme_background">#FF0F1419</color>
+    <color name="md_theme_onBackground">#FFE6E8EA</color>
+    <color name="md_theme_surface">#FF0F1419</color>
+    <color name="md_theme_onSurface">#FFE6E8EA</color>
+    <color name="md_theme_surfaceVariant">#FF323B46</color>
+    <color name="md_theme_onSurfaceVariant">#FFC6C6CD</color>
+
+    <color name="md_theme_surfaceDim">#FF0A0E12</color>
+    <color name="md_theme_surfaceBright">#FF28303A</color>
+    <color name="md_theme_surfaceContainerLowest">#FF0A0E12</color>
+    <color name="md_theme_surfaceContainerLow">#FF171D24</color>
+    <color name="md_theme_surfaceContainer">#FF1E252D</color>
+    <color name="md_theme_surfaceContainerHigh">#FF28303A</color>
+    <color name="md_theme_surfaceContainerHighest">#FF323B46</color>
+
+    <color name="md_theme_outline">#FF8E9099</color>
+    <color name="md_theme_outlineVariant">#FF45464D</color>
+    <color name="md_theme_inverseSurface">#FFE6E8EA</color>
+    <color name="md_theme_inverseOnSurface">#FF191C1E</color>
+    <color name="md_theme_scrim">#FF000000</color>
+</resources>

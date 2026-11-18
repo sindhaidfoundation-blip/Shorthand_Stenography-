@@ -1,0 +1,8 @@
+{
+  "name": "Pitman Steno",
+  "description": "Legal stenography and Pitman shorthand dictation studio featuring Pakistan law reports, outline analysis, and WPM-calibrated TTS playback.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
