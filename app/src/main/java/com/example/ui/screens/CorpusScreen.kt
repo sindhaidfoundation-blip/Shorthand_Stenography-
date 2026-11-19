@@ -49,6 +49,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -74,6 +75,7 @@ fun CorpusScreen(
     modifier: Modifier = Modifier
 ) {
     val extendedColors = LocalStenoColors.current
+    val uriHandler = LocalUriHandler.current
     val categories = listOf(
         "All",
         "Saved",
@@ -508,6 +510,29 @@ fun CorpusScreen(
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
+
+                        if (item.summary.isNotBlank()) {
+                            Text(
+                                text = "Summary: ${item.summary}",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 3,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                        if (item.sourceUrl.isNotBlank()) {
+                            Text(
+                                text = "Read original article on Dawn ↗",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier
+                                    .clickable {
+                                        runCatching { uriHandler.openUri(item.sourceUrl) }
+                                    }
+                                    .padding(vertical = 6.dp)
+                                    .testTag("dawn_source_link_${item.id}")
+                            )
+                        }
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
