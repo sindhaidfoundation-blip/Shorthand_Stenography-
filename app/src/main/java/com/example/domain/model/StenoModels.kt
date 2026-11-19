@@ -63,7 +63,8 @@ data class LegalCasePassage(
     val text: String,
     val summary: String,
     val keyPrinciples: List<String>,
-    val isCustom: Boolean = false
+    val isCustom: Boolean = false,
+    val sourceUrl: String = ""
 )
 
 enum class DictationMode {
