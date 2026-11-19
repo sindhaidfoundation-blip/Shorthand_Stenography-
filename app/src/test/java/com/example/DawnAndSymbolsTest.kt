@@ -42,6 +42,8 @@ class DawnAndSymbolsTest {
         assertFalse(item.text.contains("&ldquo;"))
         assertTrue(item.text.contains("Parliamentary oversight & reform"))
         assertTrue(item.text.contains("accountability"))
+        assertEquals("https://www.dawn.com/news/12345", item.sourceUrl)
+        assertTrue(item.summary.contains("accountability"))
     }
 
     @Test
