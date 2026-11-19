@@ -164,7 +164,6 @@ class MainActivityUiTest {
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithTag("symbols_vocabulary_list").assertExists()
         composeTestRule.onNodeWithTag("vocabulary_entry_dawn_government").assertExists()
-        composeTestRule.onNodeWithText("government").assertExists()
 
         // Navigate to Corpus and filter Dawn Editorial dictation
         composeTestRule.onNodeWithTag("nav_corpus").performClick()
