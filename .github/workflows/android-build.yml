@@ -136,4 +136,4 @@ jobs:
         run: |
           APK="$(find release-apk -type f -name '*.apk' | head -n 1)"
           test -n "$APK"
-          gh release create v1.1.0 "$APK" --title "Pitman Stenography v1.1.0" --notes "Updated version with Google Mobile Ads SDK integration. Test ads are used for initial testing."
+          gh release create v1.1.1 "$APK" --title "Pitman Stenography v1.1.1" --notes "Adds a voluntary Easypaisa developer support option. Google test ads remain enabled for development."
