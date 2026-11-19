@@ -34,6 +34,7 @@ import com.example.domain.pitman.PitmanAnalyzer
 import com.example.export.StenoPdfExporter
 import com.example.ui.theme.ThemeAppearance
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -150,6 +151,20 @@ class StenoViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             runCatching { jsonLexiconRepo.loadDatabase() }
                 .onSuccess { _jsonLexiconSnapshot.value = it }
+        }
+        // Populate the Dawn-only Corpus automatically with current, source-linked articles.
+        viewModelScope.launch {
+            _isFetchingDawn.value = true
+            val opinion = async {
+                DawnRssFetcher.fetchFeed(DawnFeedType.OPINION).getOrDefault(emptyList())
+            }
+            val news = async {
+                DawnRssFetcher.fetchFeed(DawnFeedType.NEWS).getOrDefault(emptyList())
+            }
+            _liveDawnPassages.value = (opinion.await() + news.await())
+                .filter { it.sourceUrl.isNotBlank() }
+                .distinctBy { it.id }
+            _isFetchingDawn.value = false
         }
     }
 
