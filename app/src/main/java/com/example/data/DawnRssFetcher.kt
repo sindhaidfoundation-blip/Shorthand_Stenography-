@@ -34,7 +34,7 @@ object DawnRssFetcher {
 
     suspend fun fetchFeed(
         feedType: DawnFeedType,
-        maxItems: Int = 8
+        maxItems: Int = 20
     ): Result<List<LegalCasePassage>> = withContext(Dispatchers.IO) {
         runCatching {
             val xml = downloadUrl(feedType.url)
@@ -87,11 +87,14 @@ object DawnRssFetcher {
             val element = nodeList.item(i) as? Element ?: continue
 
             val rawTitle = firstChildText(element, "title")
-            val rawDescription = firstChildText(element, "content:encoded")
-                .ifBlank { firstChildText(element, "description") }
+            // Dawn RSS description is a short summary; avoid storing full article bodies.
+            val rawDescription = firstChildText(element, "description")
+                .ifBlank { firstChildText(element, "content:encoded") }
             val pubDate = firstChildText(element, "pubDate")
-            val guid = firstChildText(element, "guid")
-                .ifBlank { firstChildText(element, "link") }
+            val articleUrl = firstChildText(element, "link").ifBlank {
+                firstChildText(element, "guid")
+            }
+            val guid = firstChildText(element, "guid").ifBlank { articleUrl }
             val author = firstChildText(element, "dc:creator")
                 .ifBlank { firstChildText(element, "author") }
 
@@ -124,7 +127,8 @@ object DawnRssFetcher {
                         keyPrinciples = listOf(
                             "Live Dawn Newspaper ${feedType.category} dispatch formatted for stenographic dictation.",
                             "Calibrated for journalistic vocabulary, parliamentary terms, and economic contractions."
-                        )
+                        ),
+                        sourceUrl = articleUrl.takeIf { it.startsWith("https://www.dawn.com/") }.orEmpty()
                     )
                 )
             }
