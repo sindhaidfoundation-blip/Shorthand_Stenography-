@@ -159,53 +159,12 @@ class MainActivityUiTest {
     fun exercisesSymbolsWorkbookAndDawnCorpusDictation() {
         composeTestRule.waitForIdle()
 
-        // Navigate to Symbols tab
+        // Symbols now presents only English vocabulary and rendered Pitman outlines.
         composeTestRule.onNodeWithTag("nav_symbols").performClick()
         composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("symbol_drill_card").assertExists()
-
-        // Answer drill and advance to next symbol
-        composeTestRule.onNodeWithTag("symbols_lazy_list")
-            .performScrollToNode(hasTestTag("drill_option_0"))
-        composeTestRule.onNodeWithTag("drill_option_0").performClick()
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("drill_next_button").performClick()
-        composeTestRule.waitForIdle()
-
-        // Bring the mode switcher back into the viewport after answering the drill.
-        composeTestRule.onNodeWithTag("symbols_lazy_list")
-            .performScrollToNode(hasTestTag("symbols_mode_JSON_LEXICON"))
-        composeTestRule.onNodeWithTag("symbols_mode_JSON_LEXICON").performClick()
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("json_db_status_card").assertExists()
-        composeTestRule.onNodeWithTag("json_lexicon_lazy_list")
-            .performScrollToNode(hasTestTag("json_entry_lex_habeas_corpus"))
-        composeTestRule.onNodeWithTag("json_entry_lex_habeas_corpus").performClick()
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("pronounce_outline_button").assertExists()
-        composeTestRule.activityRule.scenario.onActivity { activity ->
-            activity.onBackPressedDispatcher.onBackPressed()
-        }
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("json_lexicon_lazy_list")
-            .performScrollToNode(hasTestTag("symbols_mode_WORKBOOK"))
-        composeTestRule.onNodeWithTag("symbols_mode_WORKBOOK").performClick()
-        composeTestRule.waitForIdle()
-
-        // Filter to Dawn Editorial symbols and open symbol inspector sheet
-        composeTestRule.onNodeWithTag("symbols_lazy_list")
-            .performScrollToNode(hasTestTag("symbol_group_DAWN_EDITORIAL"))
-        composeTestRule.onNodeWithTag("symbol_group_DAWN_EDITORIAL").performClick()
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("symbols_lazy_list")
-            .performScrollToNode(hasTestTag("symbol_card_dawn_government"))
-        composeTestRule.onNodeWithTag("symbol_card_dawn_government").performClick()
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("pronounce_outline_button").assertExists()
-        composeTestRule.activityRule.scenario.onActivity { activity ->
-            activity.onBackPressedDispatcher.onBackPressed()
-        }
-        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("symbols_vocabulary_list").assertExists()
+        composeTestRule.onNodeWithTag("vocabulary_entry_dawn_government").assertExists()
+        composeTestRule.onNodeWithText("government").assertExists()
 
         // Navigate to Corpus and filter Dawn Editorial dictation
         composeTestRule.onNodeWithTag("nav_corpus").performClick()
