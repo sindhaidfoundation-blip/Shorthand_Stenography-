@@ -187,6 +187,8 @@ class MainActivityUiTest {
             activity.onBackPressedDispatcher.onBackPressed()
         }
         composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("symbols_lazy_list")
+            .performScrollToNode(hasTestTag("symbols_mode_WORKBOOK"))
         composeTestRule.onNodeWithTag("symbols_mode_WORKBOOK").performClick()
         composeTestRule.waitForIdle()
 
