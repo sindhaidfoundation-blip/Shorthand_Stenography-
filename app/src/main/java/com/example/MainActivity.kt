@@ -11,6 +11,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -68,6 +69,7 @@ import com.example.ui.theme.PitmanStenoTheme
 import com.example.ui.theme.ThemeAppearance
 import com.example.ui.viewmodel.StenoViewModel
 import java.util.Locale
+import com.google.android.gms.ads.MobileAds
 
 object StenoRoutes {
     const val ROUTE_DICTATE = "dictate"
@@ -88,6 +90,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        MobileAds.initialize(this) {}
         setContent {
             PitmanStenoApp()
         }
@@ -116,6 +119,8 @@ fun PitmanStenoApp(
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     val extendedColors = LocalStenoColors.current
+    val interstitialController = remember(context) { (context as? Activity)?.let { InterstitialAdController(it) } }
+    LaunchedEffect(interstitialController) { interstitialController?.load() }
 
     val audioPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
@@ -194,6 +199,7 @@ fun PitmanStenoApp(
     )
 
     fun navigateToTab(route: String) {
+        if (route != currentRoute) interstitialController?.onTabSelected()
         navController.navigate(route) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
@@ -224,37 +230,40 @@ fun PitmanStenoApp(
                 )
             },
             bottomBar = {
-                if (!useRail) {
-                    NavigationBar(
-                        containerColor = extendedColors.surfaceContainerLowest,
-                        tonalElevation = 2.dp
-                    ) {
-                        navItems.forEach { item ->
-                            val selected = currentRoute == item.route
-                            NavigationBarItem(
-                                selected = selected,
-                                onClick = { navigateToTab(item.route) },
-                                icon = {
-                                    Icon(
-                                        imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
-                                        contentDescription = stringResource(item.labelRes)
-                                    )
-                                },
-                                label = {
-                                    Text(
-                                        text = stringResource(item.labelRes),
-                                        style = MaterialTheme.typography.labelSmall
-                                    )
-                                },
-                                colors = NavigationBarItemDefaults.colors(
-                                    selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                                    selectedTextColor = MaterialTheme.colorScheme.secondary,
-                                    indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
-                                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
-                                ),
-                                modifier = Modifier.testTag(item.testTag)
-                            )
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    AdMobBanner()
+                    if (!useRail) {
+                        NavigationBar(
+                            containerColor = extendedColors.surfaceContainerLowest,
+                            tonalElevation = 2.dp
+                        ) {
+                            navItems.forEach { item ->
+                                val selected = currentRoute == item.route
+                                NavigationBarItem(
+                                    selected = selected,
+                                    onClick = { navigateToTab(item.route) },
+                                    icon = {
+                                        Icon(
+                                            imageVector = if (selected) item.selectedIcon else item.unselectedIcon,
+                                            contentDescription = stringResource(item.labelRes)
+                                        )
+                                    },
+                                    label = {
+                                        Text(
+                                            text = stringResource(item.labelRes),
+                                            style = MaterialTheme.typography.labelSmall
+                                        )
+                                    },
+                                    colors = NavigationBarItemDefaults.colors(
+                                        selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                                        selectedTextColor = MaterialTheme.colorScheme.secondary,
+                                        indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
+                                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                    ),
+                                    modifier = Modifier.testTag(item.testTag)
+                                )
+                            }
                         }
                     }
                 }
