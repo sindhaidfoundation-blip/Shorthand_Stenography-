@@ -76,17 +76,7 @@ fun CorpusScreen(
 ) {
     val extendedColors = LocalStenoColors.current
     val uriHandler = LocalUriHandler.current
-    val categories = listOf(
-        "All",
-        "Saved",
-        "Dawn Editorial",
-        "Dawn News",
-        "Constitutional",
-        "Criminal",
-        "Civil",
-        "Service",
-        "Arbitration"
-    )
+    val categories = listOf("All", "Saved", "Dawn Editorial", "Dawn News")
 
     val filteredCases = remember(
         uiState.corpusCases,
@@ -97,11 +87,11 @@ fun CorpusScreen(
         uiState.corpusSearchQuery
     ) {
         val sourcePool = if (uiState.selectedCorpusFilter == "Saved") {
-            uiState.bookmarkedPassages
+            uiState.bookmarkedPassages.filter { it.category == "Dawn Editorial" || it.category == "Dawn News" }
         } else {
-            (uiState.liveDawnPassages +
-                uiState.prefs.customBookmarks.filter { it.id in uiState.prefs.bookmarkedIds } +
-                uiState.corpusCases).distinctBy { it.id }
+            (uiState.liveDawnPassages + uiState.corpusCases)
+                .filter { it.category == "Dawn Editorial" || it.category == "Dawn News" }
+                .distinctBy { it.id }
         }
 
         sourcePool.filter { item ->
@@ -114,7 +104,8 @@ fun CorpusScreen(
                 item.citation.contains(q, ignoreCase = true) ||
                 item.court.contains(q, ignoreCase = true) ||
                 item.subtitle.contains(q, ignoreCase = true) ||
-                item.text.contains(q, ignoreCase = true)
+                item.text.contains(q, ignoreCase = true) ||
+                item.summary.contains(q, ignoreCase = true)
             matchesCategory && matchesQuery
         }
     }
@@ -127,7 +118,7 @@ fun CorpusScreen(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Judicial Hero Banner
+        // Dawn Newspaper Articles Banner
         item {
             Box(
                 modifier = Modifier
@@ -160,20 +151,20 @@ fun CorpusScreen(
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
                     Text(
-                        text = "PLD / SCMR / DAWN NEWSPAPER ARCHIVE",
+                        text = "DAWN NEWSPAPER • OPINION & NEWS",
                         fontFamily = JetBrainsMonoFontFamily,
                         style = MaterialTheme.typography.labelMedium,
                         color = extendedColors.secondaryFixed,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = "Legal & Dawn Dictation Corpus",
+                        text = "Dawn Newspaper Articles",
                         style = MaterialTheme.typography.headlineSmall,
                         fontFamily = SourceSerifFontFamily,
                         color = Color.White
                     )
                     Text(
-                        text = "${uiState.corpusCases.size + uiState.liveDawnPassages.size} verified excerpts • ${uiState.bookmarkedPassages.size} bookmarked",
+                        text = "${(uiState.corpusCases + uiState.liveDawnPassages).count { it.category == "Dawn Editorial" || it.category == "Dawn News" }} articles • ${uiState.bookmarkedPassages.count { it.category == "Dawn Editorial" || it.category == "Dawn News" }} saved",
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.White.copy(alpha = 0.85f)
                     )
@@ -186,7 +177,7 @@ fun CorpusScreen(
             OutlinedTextField(
                 value = uiState.corpusSearchQuery,
                 onValueChange = onSearchQueryChange,
-                placeholder = { Text("Search citation (PLD, SCMR, DAWN), court, or topic...") },
+                placeholder = { Text("Search Dawn article title, summary, author, or topic...") },
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.Search,
@@ -201,7 +192,7 @@ fun CorpusScreen(
             )
         }
 
-        // Category Filter Row (includes Saved, Dawn Editorial, Dawn News)
+        // Dawn-only category filters
         item {
             Row(
                 modifier = Modifier
@@ -284,7 +275,7 @@ fun CorpusScreen(
                                     color = MaterialTheme.colorScheme.primary
                                 )
                                 Text(
-                                    text = "Built-in editorials + live Dawn RSS dispatches for FPSC/Court shorthand",
+                                    text = "Dawn Opinion and News headlines with summaries and original article links",
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -374,15 +365,15 @@ fun CorpusScreen(
                             )
                         }
                         Text(
-                            text = if (isSavedEmpty) "No saved case studies yet" else "No matching law reports",
+                            text = if (isSavedEmpty) "No saved Dawn articles yet" else "No matching Dawn articles",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary
                         )
                         Text(
                             text = if (isSavedEmpty) {
-                                "Tap the bookmark icon on any legal excerpt to pin it to your local practice list."
+                                "Tap the bookmark icon on any Dawn article to save it to your reading list."
                             } else {
-                                "Try clearing your search or selecting All categories."
+                                "Try clearing your search or selecting All articles."
                             },
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -397,7 +388,7 @@ fun CorpusScreen(
                                 ),
                                 shape = RoundedCornerShape(10.dp)
                             ) {
-                                Text("Show All Cases")
+                                Text("Show All Articles")
                             }
                         }
                     }
@@ -459,14 +450,14 @@ fun CorpusScreen(
                                 if (isSelected) {
                                     Icon(
                                         imageVector = Icons.Rounded.CheckCircle,
-                                        contentDescription = "Active judgment",
+                                        contentDescription = "Selected Dawn article",
                                         tint = MaterialTheme.colorScheme.secondary,
                                         modifier = Modifier.size(18.dp)
                                     )
                                 } else if (item.isVerified) {
                                     Icon(
                                         imageVector = Icons.Outlined.Verified,
-                                        contentDescription = "Verified report",
+                                        contentDescription = "Dawn article",
                                         tint = MaterialTheme.colorScheme.secondary,
                                         modifier = Modifier.size(16.dp)
                                     )
@@ -485,7 +476,7 @@ fun CorpusScreen(
                                         contentDescription = if (isBookmarked) {
                                             "Remove bookmark"
                                         } else {
-                                            "Bookmark case study"
+                                            "Save Dawn article"
                                         },
                                         tint = if (isBookmarked) {
                                             MaterialTheme.colorScheme.secondary
