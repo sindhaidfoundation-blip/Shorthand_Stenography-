@@ -172,7 +172,9 @@ class MainActivityUiTest {
         composeTestRule.onNodeWithTag("drill_next_button").performClick()
         composeTestRule.waitForIdle()
 
-        // Exercise Legal JSON DB while the Symbols list is still at its initial position.
+        // Bring the mode switcher back into the viewport after answering the drill.
+        composeTestRule.onNodeWithTag("symbols_lazy_list")
+            .performScrollToNode(hasTestTag("symbols_mode_JSON_LEXICON"))
         composeTestRule.onNodeWithTag("symbols_mode_JSON_LEXICON").performClick()
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithTag("json_db_status_card").assertExists()
