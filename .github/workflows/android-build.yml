@@ -55,19 +55,35 @@ jobs:
           retention-days: 14
 
   release:
-    if: ${{ secrets.ANDROID_KEYSTORE_BASE64 != '' && secrets.ANDROID_STORE_PASSWORD != '' && secrets.ANDROID_KEY_PASSWORD != '' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Check release signing secrets
+        id: signing
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ] && [ -n "$ANDROID_STORE_PASSWORD" ] && [ -n "$ANDROID_KEY_PASSWORD" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Release signing secrets are not configured; skipping signed release."
+          fi
+
       - name: Checkout source
+        if: steps.signing.outputs.ready == 'true'
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
+        if: steps.signing.outputs.ready == 'true'
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Set up Gradle
+        if: steps.signing.outputs.ready == 'true'
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.3.1'
@@ -80,6 +96,7 @@ jobs:
           test -s my-upload-key.jks
 
       - name: Build signed release APK
+        if: steps.signing.outputs.ready == 'true'
         env:
           KEYSTORE_PATH: ${{ github.workspace }}/my-upload-key.jks
           STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
@@ -87,6 +104,7 @@ jobs:
         run: gradle :app:assembleRelease
 
       - name: Upload signed release APK
+        if: steps.signing.outputs.ready == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: pitman-steno-signed-release-apk
