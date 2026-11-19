@@ -87,10 +87,10 @@ fun CorpusScreen(
         uiState.corpusSearchQuery
     ) {
         val sourcePool = if (uiState.selectedCorpusFilter == "Saved") {
-            uiState.bookmarkedPassages.filter { it.category == "Dawn Editorial" || it.category == "Dawn News" }
+            uiState.bookmarkedPassages.filter { it.sourceUrl.isNotBlank() && (it.category == "Dawn Editorial" || it.category == "Dawn News") }
         } else {
-            (uiState.liveDawnPassages + uiState.corpusCases)
-                .filter { it.category == "Dawn Editorial" || it.category == "Dawn News" }
+            uiState.liveDawnPassages
+                .filter { it.sourceUrl.isNotBlank() && (it.category == "Dawn Editorial" || it.category == "Dawn News") }
                 .distinctBy { it.id }
         }
 
@@ -164,7 +164,7 @@ fun CorpusScreen(
                         color = Color.White
                     )
                     Text(
-                        text = "${(uiState.corpusCases + uiState.liveDawnPassages).count { it.category == "Dawn Editorial" || it.category == "Dawn News" }} articles • ${uiState.bookmarkedPassages.count { it.category == "Dawn Editorial" || it.category == "Dawn News" }} saved",
+                        text = "${uiState.liveDawnPassages.count { it.sourceUrl.isNotBlank() }} articles • ${uiState.bookmarkedPassages.count { it.sourceUrl.isNotBlank() }} saved",
                         style = MaterialTheme.typography.bodySmall,
                         color = Color.White.copy(alpha = 0.85f)
                     )
@@ -373,7 +373,7 @@ fun CorpusScreen(
                             text = if (isSavedEmpty) {
                                 "Tap the bookmark icon on any Dawn article to save it to your reading list."
                             } else {
-                                "Try clearing your search or selecting All articles."
+                                "Tap Dawn Opinion or Dawn News above to load the latest articles."
                             },
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
