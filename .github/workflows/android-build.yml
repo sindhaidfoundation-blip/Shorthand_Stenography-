@@ -93,8 +93,10 @@ jobs:
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: |
-          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > my-upload-key.jks
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | tr -d '[:space:]' | base64 --decode --ignore-garbage > my-upload-key.jks
           test -s my-upload-key.jks
+          keytool -list -keystore my-upload-key.jks -storepass "$ANDROID_STORE_PASSWORD" -alias upload >/dev/null
+          echo "Keystore decoded and alias verified."
 
       - name: Build signed release APK
         if: steps.signing.outputs.ready == 'true'
