@@ -504,22 +504,16 @@ fun CorpusScreen(
                         )
 
                         Text(
-                            text = item.text,
+                            text = if (item.sourceUrl.isNotBlank()) {
+                                "Summary: ${item.summary.ifBlank { item.subtitle }}"
+                            } else {
+                                item.text
+                            },
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 2,
+                            maxLines = 3,
                             overflow = TextOverflow.Ellipsis
                         )
-
-                        if (item.summary.isNotBlank()) {
-                            Text(
-                                text = "Summary: ${item.summary}",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                maxLines = 3,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
                         if (item.sourceUrl.isNotBlank()) {
                             Text(
                                 text = "Read original article on Dawn ↗",
