@@ -173,7 +173,7 @@ class MainActivityUiTest {
         composeTestRule.waitForIdle()
 
         // Exercise Legal JSON DB while the Symbols list is still at its initial position.
-        composeTestRule.onNodeWithTag("symbols_mode_JSON_LEXICON").performScrollTo().performClick()
+        composeTestRule.onNodeWithTag("symbols_mode_JSON_LEXICON").performClick()
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithTag("json_db_status_card").assertExists()
         composeTestRule.onNodeWithTag("json_lexicon_lazy_list")
