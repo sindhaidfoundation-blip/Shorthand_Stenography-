@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Material Design 3 Light Color Tokens (Pitman Steno High-Contrast Legal Palette) -->
-    <color name="md_theme_primary">#173B67</color>
-    <color name="md_theme_onPrimary">#FFFFFF</color>
-    <color name="md_theme_primaryContainer">#244B78</color>
-    <color name="md_theme_onPrimaryContainer">#FFFFFF</color>
-    <color name="md_theme_inversePrimary">#B8D7FF</color>
+    <color name="md_theme_primary">#FF000000</color>
+    <color name="md_theme_onPrimary">#FFFFFFFF</color>
+    <color name="md_theme_primaryContainer">#FF131B2E</color>
+    <color name="md_theme_onPrimaryContainer">#FF7C839B</color>
+    <color name="md_theme_inversePrimary">#FFBEC6E0</color>
 
-    <color name="md_theme_secondary">#8FC5FF</color>
-    <color name="md_theme_onSecondary">#09213D</color>
-    <color name="md_theme_secondaryContainer">#244B78</color>
-    <color name="md_theme_onSecondaryContainer">#EAF4FF</color>
+    <color name="md_theme_secondary">#FF006A61</color>
+    <color name="md_theme_onSecondary">#FFFFFFFF</color>
+    <color name="md_theme_secondaryContainer">#FF86F2E4</color>
+    <color name="md_theme_onSecondaryContainer">#FF006F66</color>
 
-    <color name="md_theme_tertiary">#B8D7FF</color>
-    <color name="md_theme_onTertiary">#102A4C</color>
-    <color name="md_theme_tertiaryContainer">#315D8C</color>
-    <color name="md_theme_onTertiaryContainer">#EAF4FF</color>
+    <color name="md_theme_tertiary">#FF000000</color>
+    <color name="md_theme_onTertiary">#FFFFFFFF</color>
+    <color name="md_theme_tertiaryContainer">#FF2F1500</color>
+    <color name="md_theme_onTertiaryContainer">#FFC76C00</color>
 
     <color name="md_theme_error">#FFBA1A1A</color>
     <color name="md_theme_onError">#FFFFFFFF</color>
     <color name="md_theme_errorContainer">#FFFFDAD6</color>
     <color name="md_theme_onErrorContainer">#FF93000A</color>
 
-    <color name="md_theme_background">#F4F7FC</color>
-    <color name="md_theme_onBackground">#102A4C</color>
-    <color name="md_theme_surface">#FFFFFF</color>
-    <color name="md_theme_onSurface">#102A4C</color>
-    <color name="md_theme_surfaceVariant">#E3ECF7</color>
-    <color name="md_theme_onSurfaceVariant">#344A63</color>
+    <color name="md_theme_background">#FFF7F9FB</color>
+    <color name="md_theme_onBackground">#FF191C1E</color>
+    <color name="md_theme_surface">#FFF7F9FB</color>
+    <color name="md_theme_onSurface">#FF191C1E</color>
+    <color name="md_theme_surfaceVariant">#FFE0E3E5</color>
+    <color name="md_theme_onSurfaceVariant">#FF45464D</color>
 
-    <color name="md_theme_surfaceDim">#D5E0ED</color>
-    <color name="md_theme_surfaceBright">#FFFFFF</color>
-    <color name="md_theme_surfaceContainerLowest">#FFFFFF</color>
-    <color name="md_theme_surfaceContainerLow">#F8FAFE</color>
-    <color name="md_theme_surfaceContainer">#F0F5FB</color>
-    <color name="md_theme_surfaceContainerHigh">#E8F0F9</color>
-    <color name="md_theme_surfaceContainerHighest">#DDE8F5</color>
+    <color name="md_theme_surfaceDim">#FFD8DADC</color>
+    <color name="md_theme_surfaceBright">#FFF7F9FB</color>
+    <color name="md_theme_surfaceContainerLowest">#FFFFFFFF</color>
+    <color name="md_theme_surfaceContainerLow">#FFF2F4F6</color>
+    <color name="md_theme_surfaceContainer">#FFECEEF0</color>
+    <color name="md_theme_surfaceContainerHigh">#FFE6E8EA</color>
+    <color name="md_theme_surfaceContainerHighest">#FFE0E3E5</color>
 
-    <color name="md_theme_outline">#607D9B</color>
-    <color name="md_theme_outlineVariant">#B7C9DC</color>
+    <color name="md_theme_outline">#FF76777D</color>
+    <color name="md_theme_outlineVariant">#FFC6C6CD</color>
     <color name="md_theme_inverseSurface">#FF2D3133</color>
     <color name="md_theme_inverseOnSurface">#FFEFF1F3</color>
     <color name="md_theme_scrim">#FF000000</color>
