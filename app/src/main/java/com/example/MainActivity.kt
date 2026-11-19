@@ -26,7 +26,9 @@ import androidx.compose.material.icons.outlined.Draw
 import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -42,10 +44,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -70,6 +76,8 @@ import com.example.ui.theme.ThemeAppearance
 import com.example.ui.viewmodel.StenoViewModel
 import java.util.Locale
 import com.google.android.gms.ads.MobileAds
+
+private const val EASYPAISA_SUPPORT_NUMBER = "03319031146"
 
 object StenoRoutes {
     const val ROUTE_DICTATE = "dictate"
@@ -117,6 +125,8 @@ fun PitmanStenoApp(
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route ?: StenoRoutes.ROUTE_DICTATE
     val snackbarHostState = remember { SnackbarHostState() }
+    var showSupportDialog by remember { mutableStateOf(false) }
+    val clipboardManager = LocalClipboardManager.current
     val context = LocalContext.current
     val extendedColors = LocalStenoColors.current
     val interstitialController = remember(context) { (context as? Activity)?.let { InterstitialAdController(it) } }
@@ -231,6 +241,9 @@ fun PitmanStenoApp(
             },
             bottomBar = {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    TextButton(onClick = { showSupportDialog = true }) {
+                        Text("Support the Developer ❤️")
+                    }
                     AdMobBanner()
                     if (!useRail) {
                         NavigationBar(
@@ -407,6 +420,28 @@ fun PitmanStenoApp(
                 }
             }
         }
+    }
+
+    if (showSupportDialog) {
+        AlertDialog(
+            onDismissRequest = { showSupportDialog = false },
+            title = { Text("Support the Developer ❤️") },
+            text = {
+                Column {
+                    Text("You can support the development of Pitman Stenography through Easypaisa.")
+                    Text("Easypaisa number: $EASYPAISA_SUPPORT_NUMBER")
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    clipboardManager.setText(AnnotatedString(EASYPAISA_SUPPORT_NUMBER))
+                    showSupportDialog = false
+                }) { Text("Copy number") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSupportDialog = false }) { Text("Close") }
+            }
+        )
     }
 
     // Modal Bottom Sheets
