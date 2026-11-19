@@ -188,9 +188,10 @@ class MainActivityUiTest {
         composeTestRule.waitForIdle()
 
         // Switch to Legal JSON DB quick lookup mode inside Symbols tab
-        // The mode switcher is the first item in the Symbols list; click it
-        // directly instead of asking the LazyColumn to scroll to its own first item.
-        composeTestRule.onNodeWithTag("symbols_mode_JSON_LEXICON").performClick()
+        // Bring the JSON mode control into view from the current list position.
+        composeTestRule.onNodeWithTag("symbols_mode_JSON_LEXICON")
+            .performScrollTo()
+            .performClick()
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithTag("json_db_status_card").assertExists()
         composeTestRule.onNodeWithTag("json_lexicon_lazy_list")
