@@ -172,6 +172,22 @@ class MainActivityUiTest {
         composeTestRule.onNodeWithTag("drill_next_button").performClick()
         composeTestRule.waitForIdle()
 
+        // Exercise Legal JSON DB while the Symbols list is still at its initial position.
+        composeTestRule.onNodeWithTag("symbols_mode_JSON_LEXICON").performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("json_db_status_card").assertExists()
+        composeTestRule.onNodeWithTag("json_lexicon_lazy_list")
+            .performScrollToNode(hasTestTag("json_entry_lex_habeas_corpus"))
+        composeTestRule.onNodeWithTag("json_entry_lex_habeas_corpus").performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("pronounce_outline_button").assertExists()
+        composeTestRule.activityRule.scenario.onActivity { activity ->
+            activity.onBackPressedDispatcher.onBackPressed()
+        }
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("symbols_mode_WORKBOOK").performClick()
+        composeTestRule.waitForIdle()
+
         // Filter to Dawn Editorial symbols and open symbol inspector sheet
         composeTestRule.onNodeWithTag("symbols_lazy_list")
             .performScrollToNode(hasTestTag("symbol_group_DAWN_EDITORIAL"))
@@ -180,26 +196,6 @@ class MainActivityUiTest {
         composeTestRule.onNodeWithTag("symbols_lazy_list")
             .performScrollToNode(hasTestTag("symbol_card_dawn_government"))
         composeTestRule.onNodeWithTag("symbol_card_dawn_government").performClick()
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("pronounce_outline_button").assertExists()
-        composeTestRule.activityRule.scenario.onActivity { activity ->
-            activity.onBackPressedDispatcher.onBackPressed()
-        }
-        composeTestRule.waitForIdle()
-
-        // Switch to Legal JSON DB quick lookup mode inside Symbols tab.
-        // The mode switcher is the first item in the Symbols LazyColumn;
-        // reset the parent list to index 0 after returning from the inspector.
-        composeTestRule.onNodeWithTag("symbols_lazy_list").performScrollToIndex(0)
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("symbols_mode_JSON_LEXICON")
-            .assertIsDisplayed()
-            .performClick()
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("json_db_status_card").assertExists()
-        composeTestRule.onNodeWithTag("json_lexicon_lazy_list")
-            .performScrollToNode(hasTestTag("json_entry_lex_habeas_corpus"))
-        composeTestRule.onNodeWithTag("json_entry_lex_habeas_corpus").performClick()
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithTag("pronounce_outline_button").assertExists()
         composeTestRule.activityRule.scenario.onActivity { activity ->
