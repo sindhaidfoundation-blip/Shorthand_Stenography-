@@ -187,10 +187,13 @@ class MainActivityUiTest {
         }
         composeTestRule.waitForIdle()
 
-        // Switch to Legal JSON DB quick lookup mode inside Symbols tab
-        // Bring the JSON mode control into view from the current list position.
+        // Switch to Legal JSON DB quick lookup mode inside Symbols tab.
+        // The mode switcher is the first item in the Symbols LazyColumn;
+        // reset the parent list to index 0 after returning from the inspector.
+        composeTestRule.onNodeWithTag("symbols_lazy_list").performScrollToIndex(0)
+        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithTag("symbols_mode_JSON_LEXICON")
-            .performScrollTo()
+            .assertIsDisplayed()
             .performClick()
         composeTestRule.waitForIdle()
         composeTestRule.onNodeWithTag("json_db_status_card").assertExists()
