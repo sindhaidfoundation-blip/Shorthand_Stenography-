@@ -128,7 +128,7 @@ fun CorpusScreen(
                             Brush.verticalGradient(
                                 colors = listOf(
                                     MaterialTheme.colorScheme.primary,
-                                    MaterialTheme.colorScheme.secondary
+                                    MaterialTheme.colorScheme.primaryContainer
                                 )
                             )
                         )
