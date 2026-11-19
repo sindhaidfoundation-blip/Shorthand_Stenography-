@@ -1,6 +1,5 @@
 package com.example.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -48,15 +47,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.R
 import com.example.domain.model.LegalCasePassage
 import com.example.domain.pitman.PitmanAnalyzer
 import com.example.ui.theme.JetBrainsMonoFontFamily
@@ -126,20 +121,14 @@ fun CorpusScreen(
                     .height(116.dp)
                     .clip(RoundedCornerShape(16.dp))
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.img_judicial_banner),
-                    contentDescription = stringResource(R.string.cd_judicial_banner),
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
-                )
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
                             Brush.verticalGradient(
                                 colors = listOf(
-                                    extendedColors.scrim.copy(alpha = 0.25f),
-                                    extendedColors.onPrimaryFixed.copy(alpha = 0.90f)
+                                    MaterialTheme.colorScheme.primary,
+                                    MaterialTheme.colorScheme.secondary
                                 )
                             )
                         )
@@ -203,7 +192,7 @@ fun CorpusScreen(
                 categories.forEach { cat ->
                     val selected = uiState.selectedCorpusFilter == cat
                     val labelText = if (cat == "Saved") {
-                        "Saved (${uiState.bookmarkedPassages.size})"
+                        "Saved (${uiState.bookmarkedPassages.count { it.sourceUrl.isNotBlank() }})"
                     } else {
                         cat
                     }
