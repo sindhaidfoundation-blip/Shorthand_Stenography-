@@ -165,18 +165,18 @@ class MainActivityUiTest {
         composeTestRule.onNodeWithTag("symbols_vocabulary_list").assertExists()
         composeTestRule.onNodeWithTag("vocabulary_entry_dawn_government").assertExists()
 
-        // Navigate to Corpus and filter Dawn Editorial dictation
+        // Corpus is now a Dawn-only article reader with live source links.
         composeTestRule.onNodeWithTag("nav_corpus").performClick()
         composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithTag("corpus_search_input").assertExists()
+        composeTestRule.onNodeWithTag("corpus_filter_Dawn Editorial").assertExists()
+        composeTestRule.onNodeWithTag("corpus_filter_Dawn News").assertExists()
         composeTestRule.onNodeWithTag("corpus_lazy_list")
             .performScrollToNode(hasTestTag("dawn_feed_card"))
         composeTestRule.onNodeWithTag("dawn_feed_card").assertExists()
+        composeTestRule.onNodeWithTag("fetch_dawn_opinion_button").assertExists()
+        composeTestRule.onNodeWithTag("fetch_dawn_news_button").assertExists()
         composeTestRule.onNodeWithTag("corpus_filter_Dawn Editorial").performScrollTo().performClick()
         composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("corpus_lazy_list")
-            .performScrollToNode(hasTestTag("corpus_case_dawn_ed_fiscal_reform"))
-        composeTestRule.onNodeWithTag("corpus_case_dawn_ed_fiscal_reform").performClick()
-        composeTestRule.waitForIdle()
-        composeTestRule.onNodeWithTag("passage_body_text").performScrollTo().assertIsDisplayed()
     }
 }
