@@ -20,7 +20,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
-private const val TEST_BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741"
+private const val BANNER_AD_UNIT_ID = "ca-app-pub-4568292017940942/8315885855"
 private const val TEST_INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"
 
 @Composable
@@ -34,7 +34,7 @@ fun AdMobBanner() {
     }
 
     LaunchedEffect(adView, widthDp) {
-        adView.adUnitId = TEST_BANNER_AD_UNIT_ID
+        adView.adUnitId = BANNER_AD_UNIT_ID
         adView.setAdSize(
             AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, widthDp)
         )
