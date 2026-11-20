@@ -136,4 +136,8 @@ jobs:
         run: |
           APK="$(find release-apk -type f -name '*.apk' | head -n 1)"
           test -n "$APK"
-          gh release create v1.1.1 "$APK" --title "Pitman Stenography v1.1.1" --notes "Adds a voluntary Easypaisa developer support option. Google test ads remain enabled for development."
+          if gh release view v1.1.1 >/dev/null 2>&1; then
+            gh release upload v1.1.1 "$APK" --clobber
+          else
+            gh release create v1.1.1 "$APK" --title "Pitman Stenography v1.1.1" --notes "Adds a voluntary Easypaisa developer support option. Google test ads remain enabled for development."
+          fi
