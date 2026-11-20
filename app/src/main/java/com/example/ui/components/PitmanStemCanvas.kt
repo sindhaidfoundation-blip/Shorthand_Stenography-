@@ -599,8 +599,19 @@ private fun DrawScope.drawPitmanGlyph(
             drawCircle(color = tealColor, radius = 2.4.dp.toPx(), center = p(0.18f, 0.62f))
         }
 
+        // New Era entries are intentionally left blank until each outline is
+        // verified against a reliable, rights-cleared diagram. Never substitute
+        // an invented generic stroke for a Pitman short form.
+        "newera_inconvenience",
+        "newera_distinguished",
+        "newera_income",
+        "newera_become",
+        "newera_becoming",
+        "newera_welcome",
+        "newera_nevertheless" -> Unit
+
         else -> {
-            // Judicial balanced outline: heavy stem + medial curve + hook
+            // Fallback retained only for legacy, non-New-Era catalogue entries.
             val stem = Path().apply {
                 val a = p(0.24f, 0.28f)
                 val b = p(0.42f, 0.62f)
