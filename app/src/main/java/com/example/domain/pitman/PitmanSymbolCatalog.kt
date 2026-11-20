@@ -750,6 +750,127 @@ object PitmanSymbolCatalog {
             )
         ),
 
+        // New Era short-form vocabulary (word labels added for the Symbols list).
+        PitmanSymbolEntry(
+            id = "newera_inconvenience",
+            group = SymbolExerciseGroup.DAWN_EDITORIAL,
+            phoneticCue = "",
+            directionHint = "New Era short form — outline requires final diagram verification",
+            isHeavy = false,
+            spec = StenoStrokeSpec(
+                term = "inconvenience",
+                strokeFormula = "New Era short form",
+                position = StenoPosition.SECOND,
+                category = StenoCategory.CONTRACTION,
+                theoryPrinciple = "New Era short form",
+                ruleNote = "Outline geometry pending verification against the printed source.",
+                legalDefinition = "New Era short-form vocabulary.",
+                glyphKey = "newera_inconvenience"
+            )
+        ),
+        PitmanSymbolEntry(
+            id = "newera_distinguished",
+            group = SymbolExerciseGroup.DAWN_EDITORIAL,
+            phoneticCue = "",
+            directionHint = "New Era short form — outline requires final diagram verification",
+            isHeavy = false,
+            spec = StenoStrokeSpec(
+                term = "distinguished",
+                strokeFormula = "New Era short form",
+                position = StenoPosition.SECOND,
+                category = StenoCategory.CONTRACTION,
+                theoryPrinciple = "New Era short form",
+                ruleNote = "Outline geometry pending verification against the printed source.",
+                legalDefinition = "New Era short-form vocabulary.",
+                glyphKey = "newera_distinguished"
+            )
+        ),
+        PitmanSymbolEntry(
+            id = "newera_income",
+            group = SymbolExerciseGroup.DAWN_EDITORIAL,
+            phoneticCue = "",
+            directionHint = "New Era short form — outline requires final diagram verification",
+            isHeavy = false,
+            spec = StenoStrokeSpec(
+                term = "income",
+                strokeFormula = "New Era short form",
+                position = StenoPosition.SECOND,
+                category = StenoCategory.CONTRACTION,
+                theoryPrinciple = "New Era short form",
+                ruleNote = "Outline geometry pending verification against the printed source.",
+                legalDefinition = "New Era short-form vocabulary.",
+                glyphKey = "newera_income"
+            )
+        ),
+        PitmanSymbolEntry(
+            id = "newera_become",
+            group = SymbolExerciseGroup.DAWN_EDITORIAL,
+            phoneticCue = "",
+            directionHint = "New Era short form — outline requires final diagram verification",
+            isHeavy = false,
+            spec = StenoStrokeSpec(
+                term = "become",
+                strokeFormula = "New Era short form",
+                position = StenoPosition.SECOND,
+                category = StenoCategory.CONTRACTION,
+                theoryPrinciple = "New Era short form",
+                ruleNote = "Outline geometry pending verification against the printed source.",
+                legalDefinition = "New Era short-form vocabulary.",
+                glyphKey = "newera_become"
+            )
+        ),
+        PitmanSymbolEntry(
+            id = "newera_becoming",
+            group = SymbolExerciseGroup.DAWN_EDITORIAL,
+            phoneticCue = "",
+            directionHint = "New Era short form — outline requires final diagram verification",
+            isHeavy = false,
+            spec = StenoStrokeSpec(
+                term = "becoming",
+                strokeFormula = "New Era short form",
+                position = StenoPosition.SECOND,
+                category = StenoCategory.CONTRACTION,
+                theoryPrinciple = "New Era short form",
+                ruleNote = "Outline geometry pending verification against the printed source.",
+                legalDefinition = "New Era short-form vocabulary.",
+                glyphKey = "newera_becoming"
+            )
+        ),
+        PitmanSymbolEntry(
+            id = "newera_welcome",
+            group = SymbolExerciseGroup.DAWN_EDITORIAL,
+            phoneticCue = "",
+            directionHint = "New Era short form — outline requires final diagram verification",
+            isHeavy = false,
+            spec = StenoStrokeSpec(
+                term = "welcome",
+                strokeFormula = "New Era short form",
+                position = StenoPosition.SECOND,
+                category = StenoCategory.CONTRACTION,
+                theoryPrinciple = "New Era short form",
+                ruleNote = "Outline geometry pending verification against the printed source.",
+                legalDefinition = "New Era short-form vocabulary.",
+                glyphKey = "newera_welcome"
+            )
+        ),
+        PitmanSymbolEntry(
+            id = "newera_nevertheless",
+            group = SymbolExerciseGroup.DAWN_EDITORIAL,
+            phoneticCue = "",
+            directionHint = "New Era short form — outline requires final diagram verification",
+            isHeavy = false,
+            spec = StenoStrokeSpec(
+                term = "nevertheless",
+                strokeFormula = "New Era short form",
+                position = StenoPosition.SECOND,
+                category = StenoCategory.CONTRACTION,
+                theoryPrinciple = "New Era short form",
+                ruleNote = "Outline geometry pending verification against the printed source.",
+                legalDefinition = "New Era short-form vocabulary.",
+                glyphKey = "newera_nevertheless"
+            )
+        ),
+
         // Signature Legal Outlines
         PitmanSymbolEntry(
             id = "legal_learned_counsel",
