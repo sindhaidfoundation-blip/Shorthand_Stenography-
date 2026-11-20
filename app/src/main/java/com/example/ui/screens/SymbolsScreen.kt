@@ -76,6 +76,14 @@ fun SymbolsScreen(
                         spec = entry.spec,
                         modifier = Modifier.fillMaxWidth().height(76.dp)
                     )
+                    if (entry.id.startsWith("newera_")) {
+                        Text(
+                            text = "Outline pending verification",
+                            modifier = Modifier.fillMaxWidth(),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
         }
