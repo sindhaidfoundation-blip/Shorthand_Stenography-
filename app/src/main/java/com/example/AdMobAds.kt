@@ -21,7 +21,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
 private const val BANNER_AD_UNIT_ID = "ca-app-pub-4568292017940942/8315885855"
-private const val TEST_INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"
+private const val INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-4568292017940942/4516241640"
 
 @Composable
 fun AdMobBanner() {
@@ -60,7 +60,7 @@ class InterstitialAdController(private val activity: Activity) {
 
         InterstitialAd.load(
             activity,
-            TEST_INTERSTITIAL_AD_UNIT_ID,
+            INTERSTITIAL_AD_UNIT_ID,
             AdRequest.Builder().build(),
             object : InterstitialAdLoadCallback() {
                 override fun onAdLoaded(ad: InterstitialAd) {
