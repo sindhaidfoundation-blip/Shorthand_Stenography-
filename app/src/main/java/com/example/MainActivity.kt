@@ -95,18 +95,24 @@ private data class NavDestinationItem(
 )
 
 class MainActivity : ComponentActivity() {
+    private val adsReady = mutableStateOf(false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        MobileAds.initialize(this) {}
         setContent {
-            PitmanStenoApp()
+            PitmanStenoApp(adsReady = adsReady.value)
+        }
+        // Wait for the Google Mobile Ads SDK before requesting any ad.
+        MobileAds.initialize(this) {
+            runOnUiThread { adsReady.value = true }
         }
     }
 }
 
 @Composable
 fun PitmanStenoApp(
+    adsReady: Boolean,
     viewModel: StenoViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -130,7 +136,9 @@ fun PitmanStenoApp(
     val context = LocalContext.current
     val extendedColors = LocalStenoColors.current
     val interstitialController = remember(context) { (context as? Activity)?.let { InterstitialAdController(it) } }
-    LaunchedEffect(interstitialController) { interstitialController?.load() }
+    LaunchedEffect(interstitialController, adsReady) {
+        if (adsReady) interstitialController?.load()
+    }
 
     val audioPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
@@ -244,7 +252,7 @@ fun PitmanStenoApp(
                     TextButton(onClick = { showSupportDialog = true }) {
                         Text("Support the Developer ❤️")
                     }
-                    AdMobBanner()
+                    AdMobBanner(enabled = adsReady)
                     if (!useRail) {
                         NavigationBar(
                             containerColor = extendedColors.surfaceContainerLowest,

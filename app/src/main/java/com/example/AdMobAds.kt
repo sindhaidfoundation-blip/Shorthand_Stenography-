@@ -24,21 +24,30 @@ private const val BANNER_AD_UNIT_ID = "ca-app-pub-4568292017940942/8315885855"
 private const val INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-4568292017940942/4516241640"
 
 @Composable
-fun AdMobBanner() {
+fun AdMobBanner(enabled: Boolean) {
     val context = LocalContext.current
     val widthDp = LocalConfiguration.current.screenWidthDp.coerceAtLeast(1)
-    val adView = remember(context) { AdView(context) }
+
+    // Configure the view's size before AndroidView measures it. Previously the
+    // size was assigned later in LaunchedEffect, which could leave the banner
+    // with a zero-height first measurement on some devices.
+    val adView = remember(context, widthDp) {
+        AdView(context).apply {
+            adUnitId = BANNER_AD_UNIT_ID
+            setAdSize(
+                AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, widthDp)
+            )
+        }
+    }
 
     DisposableEffect(adView) {
         onDispose { adView.destroy() }
     }
 
-    LaunchedEffect(adView, widthDp) {
-        adView.adUnitId = BANNER_AD_UNIT_ID
-        adView.setAdSize(
-            AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, widthDp)
-        )
-        adView.loadAd(AdRequest.Builder().build())
+    LaunchedEffect(adView, enabled) {
+        if (enabled) {
+            adView.loadAd(AdRequest.Builder().build())
+        }
     }
 
     AndroidView(
